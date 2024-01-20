@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,12 +11,12 @@ public class PlayerController : MonoBehaviour
     private bool doubleJump;
 
     [Header("Wall Sliding Settings")]
-    [SerializeField]float wallSlidingSpeed = 2f;
+    [SerializeField] float wallSlidingSpeed = 2f;
     private bool isWallSliding;
 
     [Header("Wall Jumping Settings")]
-    [SerializeField]private float wallJumpingTime = 0.2f;
-    [SerializeField]private float wallJumpingDuration = 0.4f;
+    [SerializeField] private float wallJumpingTime = 0.2f;
+    [SerializeField] private float wallJumpingDuration = 0.4f;
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingCounter;
@@ -191,6 +190,6 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
-        canDash = true; 
+        canDash = true;
     }
 }
