@@ -93,8 +93,6 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
-
-        Debug.Log(rb.velocity);
     }
 
     private void FixedUpdate()

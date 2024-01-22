@@ -1,83 +1,93 @@
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using Ink.Runtime;
 
 public class DialogueController : MonoBehaviour
 {
-    //El texto que contará el diálogo.
+    [Header("Dialogue UI")]
+    [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private string[] lines;
-    [SerializeField] private float testSpeed;
-    int index;
+    public float textSpeed;
 
-    Image image;
+    private Story currentStory;
 
+    private bool dialogueIsPlaying;
+    private bool isPrinting;
+
+    public static DialogueController THIS;
     // Start is called before the first frame update
     void Start()
     {
-        dialogueText.text = string.Empty;
-
-        image = GetComponent<Image>();
+        THIS = this;
+        isPrinting = false;
+        dialogueIsPlaying = false;
+        dialoguePanel.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(index);
-        if (NPController.THIS.playerIsClose == true)
+        if (dialogueIsPlaying && !isPrinting)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                StartDialogue();
-            }
-
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log(index);
-                if (dialogueText.text == lines[index])
+                if (currentStory.canContinue)
                 {
-                    NextLine();
+                    ContinueStory();
                 }
                 else
                 {
-                    StopAllCoroutines();
-                    dialogueText.text = lines[index];
+                    ExitDialogueMode();
                 }
             }
         }
     }
 
-    void StartDialogue()
+    public void EnterDialogueMode(TextAsset inkJson)
     {
-        index = 0;
-        image.enabled = true;
-        dialogueText.text = string.Empty;
-        dialogueText.gameObject.SetActive(true);
-        StartCoroutine(TypeLine());
+        currentStory = new Story(inkJson.text);
+        dialogueIsPlaying = true;
+        dialoguePanel.SetActive(true);
+
+        ContinueStory();
     }
 
-    void NextLine()
+    void ExitDialogueMode()
     {
-        if (index < lines.Length - 1)
+        dialogueIsPlaying = false;
+        dialoguePanel.SetActive(false);
+        dialogueText.text = "";
+    }
+
+    void ContinueStory()
+    {
+        if (currentStory.canContinue)
         {
-            index++;
-            dialogueText.text = string.Empty;
-            StartCoroutine(TypeLine());
+            string text = currentStory.Continue();
+            dialogueText.text = "";
+            StartCoroutine(PrintTextByCharacter(text));
         }
         else
         {
-            image.enabled = false;
-            dialogueText.gameObject.SetActive(false);
+            ExitDialogueMode();
         }
     }
 
-    IEnumerator TypeLine()
+    IEnumerator PrintTextByCharacter(string text)
     {
-        foreach (char c in lines[index].ToCharArray())
+        isPrinting = true;
+        foreach (char c in text)
         {
             dialogueText.text += c;
-            yield return new WaitForSeconds(testSpeed);
+            yield return new WaitForSeconds(textSpeed);
         }
+        isPrinting = false;
+    }
+
+    public static DialogueController GetInstance()
+    {
+        return THIS;
     }
 }
