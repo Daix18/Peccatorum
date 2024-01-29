@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    private float jumpingPower = 16f;
+    [SerializeField]private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
     private bool doubleJump;
@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashingPower = 24f;
     [SerializeField] private float dashingTime = 0.2f;
     [SerializeField] private float dashingCooldown = 1f;
+    private Vector2 dashingDir;
     private bool canDash = true;
     private bool isDashing;
 
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
         if (isDashing)
         {
+            rb.velocity = dashingDir.normalized * dashingPower;
             return;
         }
 
@@ -179,13 +181,14 @@ public class PlayerController : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-        float originalGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
         tr.emitting = true;
+        dashingDir = new Vector2 (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (dashingDir == Vector2.zero)
+        {
+            dashingDir = new Vector2(transform.localScale.x, 0);
+        }
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
-        rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
