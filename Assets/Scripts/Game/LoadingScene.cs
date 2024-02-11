@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoadingScene : MonoBehaviour
 {
@@ -21,9 +20,9 @@ public class LoadingScene : MonoBehaviour
 
         LoadingScreen.SetActive(true);
 
-        while (!operation.isDone) 
+        while (!operation.isDone)
         {
-            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);    
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
 
             LoadingLogo.fillAmount = progressValue;
 

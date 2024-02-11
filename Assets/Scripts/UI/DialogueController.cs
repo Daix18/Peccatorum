@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using Ink.Runtime;
+using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class DialogueController : MonoBehaviour
 {
