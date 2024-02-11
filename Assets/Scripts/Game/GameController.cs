@@ -7,8 +7,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private Image mapa;
     [SerializeField] private Image playerIcon;
 
-    [SerializeField] private PlayerController player;
-
     // Start is called before the first frame update
     void Start()
     {

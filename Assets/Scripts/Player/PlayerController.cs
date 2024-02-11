@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    [SerializeField]private float jumpingPower = 16f;
+    [SerializeField] private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
     private bool doubleJump;
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
         canDash = false;
         isDashing = true;
         tr.emitting = true;
-        dashingDir = new Vector2 (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (dashingDir == Vector2.zero)
         {
             dashingDir = new Vector2(transform.localScale.x, 0);
