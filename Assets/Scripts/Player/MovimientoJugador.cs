@@ -7,6 +7,8 @@ public class MovimientoJugador : MonoBehaviour
     private Rigidbody2D rb;
     private TrailRenderer tr;
 
+    public static MovimientoJugador THIS;
+
     [Header("Movimiento")]
     private float inputX;
     private float movimientoHorizontal = 0f;
@@ -46,6 +48,10 @@ public class MovimientoJugador : MonoBehaviour
     private bool canDash = true;
     private bool isDashing;
 
+    [Header("Knife Mechanic Settings")]
+    [SerializeField] private GameObject knifePrefab;
+    [SerializeField] private Transform lanzamientoPosicion;
+    [SerializeField] private float fuerzaLanzamiento = 10f;
 
     private void Start()
     {
@@ -67,6 +73,11 @@ public class MovimientoJugador : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            LanzarCuchillo();
         }
 
         //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
@@ -102,7 +113,7 @@ public class MovimientoJugador : MonoBehaviour
         }
     }
 
-    public void Move(float mover, bool jumping)
+    private void Move(float mover, bool jumping)
     {
         if (!wallJumping)
         {
@@ -134,7 +145,7 @@ public class MovimientoJugador : MonoBehaviour
         }
     }
 
-    public void Jump()
+    private void Jump()
     {
         onGround = false;
         rb.AddForce(new Vector2(0f, jumpingForce));
@@ -144,7 +155,6 @@ public class MovimientoJugador : MonoBehaviour
     {
         onWall = false;
         rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
-        //rb.AddForce(new Vector2(0f, jumpForceWallY));
         StartCoroutine(WallJumpChange());
     }
 
@@ -154,6 +164,14 @@ public class MovimientoJugador : MonoBehaviour
         Vector3 escala = transform.localScale;
         escala.x *= -1;
         transform.localScale = escala;
+    }
+
+    void LanzarCuchillo()
+    {
+        GameObject projectile = Instantiate(knifePrefab, transform.position, Quaternion.identity);
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
+        rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
     private void OnDrawGizmos()

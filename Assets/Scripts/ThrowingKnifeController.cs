@@ -26,24 +26,4 @@ public class ThrowingKnifeController : MonoBehaviour
 
         rb.velocity = direccionLanzamiento * fuerzaLanzamiento;
     }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Diana"))
-        {
-            // Teletransportar al personaje principal a la posición de la colisión
-            GameObject personaje = GameObject.FindGameObjectWithTag("Player");
-            personaje.transform.position = other.transform.position;
-
-            // Destruir el cuchillo
-            Destroy(cuchilloLanzado);
-            cuchilloLanzado = null;
-        }
-        else if (other.gameObject.CompareTag("Pared"))
-        {
-            // Si choca con una pared, destruir el cuchillo sin teletransportar al jugador
-            Destroy(cuchilloLanzado);
-            cuchilloLanzado = null;
-        }
-    }
 }
