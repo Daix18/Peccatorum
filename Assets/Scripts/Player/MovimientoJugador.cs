@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovimientoJugador : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private TrailRenderer tr;
 
     [Header("Movimiento")]
     private float inputX;
@@ -37,10 +38,19 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform wallChecker;
     [SerializeField] private Vector3 wallBoxDimensions;
 
+    [Header("Dash Settings")]
+    [SerializeField] private float dashingPower = 24f;
+    [SerializeField] private float dashingTime = 0.2f;
+    [SerializeField] private float dashingCooldown = 1f;
+    private Vector2 dashingDir;
+    private bool canDash = true;
+    private bool isDashing;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        tr = GetComponent<TrailRenderer>();
     }
 
     private void Update()
@@ -48,9 +58,22 @@ public class MovimientoJugador : MonoBehaviour
         inputX = Input.GetAxisRaw("Horizontal");
         movimientoHorizontal = inputX * speedMovement;
 
+        if (isDashing)
+        {
+            rb.velocity = dashingDir.normalized * dashingPower;
+            return;
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
+        }
+
+        //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            //Llamamos a la corrutina Dash
+            StartCoroutine(Dash());
         }
 
         if (!onGround && onWall && inputX != 0)
@@ -73,7 +96,7 @@ public class MovimientoJugador : MonoBehaviour
 
         jump = false;
 
-        if (wallSliding)
+        if (wallSliding && isDashing)
         {
             rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
         }
@@ -145,5 +168,22 @@ public class MovimientoJugador : MonoBehaviour
         wallJumping = true;
         yield return new WaitForSeconds(wallJumpTime);
         wallJumping = false;
+    }
+
+    IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        tr.emitting = true;
+        dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (dashingDir == Vector2.zero)
+        {
+            dashingDir = new Vector2(transform.localScale.x, 0);
+        }
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
     }
 }
