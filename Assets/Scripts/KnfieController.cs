@@ -4,24 +4,35 @@ using UnityEngine;
 
 public class KnfieController : MonoBehaviour
 {
-    [SerializeField] private Transform teleportPosition;
+    //[SerializeField] private Transform teleportPosition;
 
-    public Transform player;
+    private Transform player;
 
-    Rigidbody2D rb;
-    private void Start()
+    void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Diana")) // Asegúrate de que tu tabla de madera tenga este tag
+        // Busca al jugador en la escena y obtiene su transform
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
         {
-            player.position = transform.position; // Teletransporta al jugador a la posición del proyectil
-            // Opcional: Añade aquí una animación o efecto
-            Destroy(gameObject); // Destruye el proyectil
+            player = playerObject.transform;
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Diana"))
+        {
+            // Si colisiona con una "Diana", teletransporta al jugador
+            if (player != null)
+            {
+                player.position = transform.position;
+                // Opcional: Añade aquí una animación o efecto para la teletransportación
+            }
+        }
+        // Destruye el proyectil en cualquier caso
+        Destroy(gameObject);
+    }
+}
 
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
@@ -45,4 +56,3 @@ public class KnfieController : MonoBehaviour
     //    // Destruir el cuchillo
     //    //Destroy(gameObject);
     //}
-}
