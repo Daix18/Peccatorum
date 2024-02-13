@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovimientoJugador : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private TrailRenderer tr;
 
     [Header("Movimiento")]
     private float inputX;
@@ -37,10 +38,23 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform wallChecker;
     [SerializeField] private Vector3 wallBoxDimensions;
 
+    [Header("Dash Settings")]
+    [SerializeField] private float dashingPower = 24f;
+    [SerializeField] private float dashingTime = 0.2f;
+    [SerializeField] private float dashingCooldown = 1f;
+    private Vector2 dashingDir;
+    private bool canDash = true;
+    private bool isDashing;
+
+    [Header("Knife Mechanic Settings")]
+    [SerializeField] private GameObject knifePrefab;
+    [SerializeField] private Transform lanzamientoPosicion;
+    [SerializeField] private float fuerzaLanzamiento = 10f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        tr = GetComponent<TrailRenderer>();
     }
 
     private void Update()
@@ -48,9 +62,27 @@ public class MovimientoJugador : MonoBehaviour
         inputX = Input.GetAxisRaw("Horizontal");
         movimientoHorizontal = inputX * speedMovement;
 
+        if (isDashing)
+        {
+            rb.velocity = dashingDir.normalized * dashingPower;
+            return;
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            LanzarCuchillo();
+        }
+
+        //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            //Llamamos a la corrutina Dash
+            StartCoroutine(Dash());
         }
 
         if (!onGround && onWall && inputX != 0)
@@ -73,13 +105,13 @@ public class MovimientoJugador : MonoBehaviour
 
         jump = false;
 
-        if (wallSliding)
+        if (wallSliding && isDashing)
         {
             rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
         }
     }
 
-    public void Move(float mover, bool jumping)
+    private void Move(float mover, bool jumping)
     {
         if (!wallJumping)
         {
@@ -111,7 +143,7 @@ public class MovimientoJugador : MonoBehaviour
         }
     }
 
-    public void Jump()
+    private void Jump()
     {
         onGround = false;
         rb.AddForce(new Vector2(0f, jumpingForce));
@@ -121,7 +153,6 @@ public class MovimientoJugador : MonoBehaviour
     {
         onWall = false;
         rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
-        //rb.AddForce(new Vector2(0f, jumpForceWallY));
         StartCoroutine(WallJumpChange());
     }
 
@@ -131,6 +162,14 @@ public class MovimientoJugador : MonoBehaviour
         Vector3 escala = transform.localScale;
         escala.x *= -1;
         transform.localScale = escala;
+    }
+
+    void LanzarCuchillo()
+    {
+        GameObject projectile = Instantiate(knifePrefab, lanzamientoPosicion.position, Quaternion.identity);
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
+        rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
     private void OnDrawGizmos()
@@ -145,5 +184,22 @@ public class MovimientoJugador : MonoBehaviour
         wallJumping = true;
         yield return new WaitForSeconds(wallJumpTime);
         wallJumping = false;
+    }
+
+    IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        tr.emitting = true;
+        dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (dashingDir == Vector2.zero)
+        {
+            dashingDir = new Vector2(transform.localScale.x, 0);
+        }
+        yield return new WaitForSeconds(dashingTime);
+        tr.emitting = false;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
     }
 }
