@@ -166,7 +166,7 @@ public class MovimientoJugador : MonoBehaviour
 
     void LanzarCuchillo()
     {
-        GameObject projectile = Instantiate(knifePrefab, transform.position, Quaternion.identity);
+        GameObject projectile = Instantiate(knifePrefab, lanzamientoPosicion.position, Quaternion.identity);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
         rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
