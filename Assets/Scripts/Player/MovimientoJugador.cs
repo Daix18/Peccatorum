@@ -7,8 +7,6 @@ public class MovimientoJugador : MonoBehaviour
     private Rigidbody2D rb;
     private TrailRenderer tr;
 
-    public static MovimientoJugador THIS;
-
     [Header("Movimiento")]
     private float inputX;
     private float movimientoHorizontal = 0f;

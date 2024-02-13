@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4170110281044481599}
   - component: {fileID: 4170110281044481598}
-  - component: {fileID: 4170110281044481597}
+  - component: {fileID: 7831693077762614342}
   - component: {fileID: 4170110281044481592}
   - component: {fileID: 4170110281044481593}
   m_Layer: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4170110281044481597
+--- !u!114 &7831693077762614342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,10 +97,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4170110281044481596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b6ce6341831457499a6339e900b6212, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b710562207af864cb2c28710b2e4139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teleportPosition: {fileID: 2296361890016140298}
 --- !u!50 &4170110281044481592
 Rigidbody2D:
   serializedVersion: 4
