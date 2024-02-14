@@ -20,7 +20,7 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private LayerMask queEsSuelo;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
-    [SerializeField] private bool onGround;
+    [SerializeField] private bool isOnGround; // Renombrado de variable
     private bool jump = false;
 
     [Header("Wall Slide Settings")]
@@ -55,6 +55,12 @@ public class MovimientoJugador : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<TrailRenderer>();
+
+        // Manejo de excepciones
+        if (rb == null || tr == null)
+        {
+            Debug.LogError("No se pudo encontrar uno o ambos componentes Rigidbody2D y TrailRenderer.");
+        }
     }
 
     private void Update()
@@ -85,7 +91,7 @@ public class MovimientoJugador : MonoBehaviour
             StartCoroutine(Dash());
         }
 
-        if (!onGround && onWall && inputX != 0)
+        if (!isOnGround && onWall && inputX != 0) // Modificación de variable
         {
             wallSliding = true;
         }
@@ -97,7 +103,7 @@ public class MovimientoJugador : MonoBehaviour
 
     private void FixedUpdate()
     {
-        onGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
+        isOnGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
 
         Move(movimientoHorizontal * Time.fixedDeltaTime, jump);
 
@@ -128,14 +134,14 @@ public class MovimientoJugador : MonoBehaviour
             Flip();
         }
 
-        if (jumping && onGround && !wallSliding)
+        if (jumping && isOnGround && !wallSliding) // Modificación de variable
         {
             //Salto normal
             Jump();
         }
 
         //La diferencia en este if es la exclamación
-        if (jumping && onWall && wallSliding)
+        if (jumping && onWall && wallSliding) // Modificación de variable
         {
             //Salto en pared
             WallJump();
@@ -145,7 +151,7 @@ public class MovimientoJugador : MonoBehaviour
 
     private void Jump()
     {
-        onGround = false;
+        isOnGround = false; // Modificación de variable
         rb.AddForce(new Vector2(0f, jumpingForce));
     }
 
