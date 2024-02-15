@@ -23,6 +23,9 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private bool onGround;
     private bool jump = false;
 
+    [Header("Double Jump")]
+    //Añadir variables para el doble salto
+
     [Header("Wall Slide Settings")]
     [SerializeField] private float wallSlideSpeed;
     private bool onWall;
@@ -51,6 +54,13 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform lanzamientoPosicion;
     [SerializeField] private float fuerzaLanzamiento = 10f;
 
+    [Header("Coyote Time")]
+    [SerializeField] private float coyoteTime = 0.2f; // Tiempo adicional para permitir saltos después de salir del suelo
+    [SerializeField] private float jumpBufferTime = 0.1f; // Tiempo de buffering para aceptar saltos antes de tocar el suelo
+    private float coyoteTimeCounter; // Contador para el coyote time
+    private float jumpBufferCounter; // Contador para el buffering de salto
+
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -70,8 +80,40 @@ public class MovimientoJugador : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            jump = true;
+            // Buffering de salto
+            if (onGround || coyoteTimeCounter > 0)
+            {
+                Jump();
+            }
+            else
+            {
+                // Iniciar el contador de buffering de salto
+                jumpBufferCounter = jumpBufferTime;
+            }
         }
+
+        if (jumpBufferCounter > 0)
+        {
+            // Reducir el contador de buffering de salto
+            jumpBufferCounter -= Time.deltaTime;
+
+            // Si el jugador toca el suelo mientras el buffer está activo, saltar
+            if (onGround)
+            {
+                Jump();
+            }
+        }
+
+        // Actualizar el contador de coyote time
+        if (onGround)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
