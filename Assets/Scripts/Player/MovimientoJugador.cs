@@ -205,6 +205,7 @@ public class MovimientoJugador : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
         isDashing = false;
+        rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
