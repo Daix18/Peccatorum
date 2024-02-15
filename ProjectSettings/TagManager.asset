@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NPC
   - Diana
+  - Enemigo
   layers:
   - Default
   - TransparentFX
