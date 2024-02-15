@@ -20,7 +20,7 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private LayerMask queEsSuelo;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
-    [SerializeField] private bool isOnGround; // Renombrado de variable
+    [SerializeField] private bool onGround;
     private bool jump = false;
 
     [Header("Wall Slide Settings")]
@@ -55,12 +55,6 @@ public class MovimientoJugador : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<TrailRenderer>();
-
-        // Manejo de excepciones
-        if (rb == null || tr == null)
-        {
-            Debug.LogError("No se pudo encontrar uno o ambos componentes Rigidbody2D y TrailRenderer.");
-        }
     }
 
     private void Update()
@@ -87,11 +81,12 @@ public class MovimientoJugador : MonoBehaviour
         //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
+
             //Llamamos a la corrutina Dash
             StartCoroutine(Dash());
         }
 
-        if (!isOnGround && onWall && inputX != 0) // Modificación de variable
+        if (!onGround && onWall && inputX != 0)
         {
             wallSliding = true;
         }
@@ -103,7 +98,7 @@ public class MovimientoJugador : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isOnGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
+        onGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
 
         Move(movimientoHorizontal * Time.fixedDeltaTime, jump);
 
@@ -111,7 +106,7 @@ public class MovimientoJugador : MonoBehaviour
 
         jump = false;
 
-        if (wallSliding && isDashing)
+        if (wallSliding)
         {
             rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
         }
@@ -134,14 +129,14 @@ public class MovimientoJugador : MonoBehaviour
             Flip();
         }
 
-        if (jumping && isOnGround && !wallSliding) // Modificación de variable
+        if (jumping && onGround && !wallSliding)
         {
             //Salto normal
             Jump();
         }
 
         //La diferencia en este if es la exclamación
-        if (jumping && onWall && wallSliding) // Modificación de variable
+        if (jumping && onWall && wallSliding)
         {
             //Salto en pared
             WallJump();
@@ -151,7 +146,7 @@ public class MovimientoJugador : MonoBehaviour
 
     private void Jump()
     {
-        isOnGround = false; // Modificación de variable
+        onGround = false;
         rb.AddForce(new Vector2(0f, jumpingForce));
     }
 
