@@ -8,18 +8,20 @@ public class MovimientoJugador : MonoBehaviour
     private TrailRenderer tr;
 
     [Header("Movimiento")]
-    private float inputX;
-    private float movimientoHorizontal = 0f;
     [SerializeField] private float speedMovement;
     [Range(0, 0.3f)][SerializeField] private float suavizadoDeMovimiento;
+    private float inputX;
+    private float movimientoHorizontal = 0f;
     private Vector3 velocidad = Vector3.zero;
     private bool mirandoDerecha = true;
     private float _yVelReleaseMod = 2f;
+    private float _aumentGravity = 1f;
 
     [Header("Salto")]
     [SerializeField] private int maxJumps = 2;
     [SerializeField] private int _jumpsLeft;
     [SerializeField] private float jumpingForce;
+    [SerializeField] private float _maxFallSpeed;
     [SerializeField] private LayerMask queEsSuelo;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
@@ -32,6 +34,8 @@ public class MovimientoJugador : MonoBehaviour
     private bool wallSliding;
 
     [Header("Wall Jump Settings")]
+    [SerializeField] private int maxDashes = 1;
+    [SerializeField] private int _dashesLeft;
     [SerializeField] private float jumpForceWallX;
     [SerializeField] private float jumpForceWallY;
     [SerializeField] private float wallJumpTime;
@@ -59,6 +63,7 @@ public class MovimientoJugador : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<TrailRenderer>();
         _jumpsLeft = maxJumps;
+        _dashesLeft = maxDashes;
     }
 
     private void Update()
@@ -86,6 +91,17 @@ public class MovimientoJugador : MonoBehaviour
         if (onGround && rb.velocity.y <= 0)
         {
             _jumpsLeft = maxJumps;
+            _dashesLeft = maxDashes;
+            rb.gravityScale = 1;
+        }
+
+        if (rb.velocity.y < 0)
+        {
+            //Se aumenta la gravedad  cuando caes.
+            rb.gravityScale = _aumentGravity * 1.5f;
+
+            //Se limita la velocidad de caída en el eje Y.
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -_maxFallSpeed));
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -94,7 +110,7 @@ public class MovimientoJugador : MonoBehaviour
         }
 
         //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && _dashesLeft > 0)
         {
             //Llamamos a la corrutina Dash
             StartCoroutine(Dash());
@@ -206,6 +222,7 @@ public class MovimientoJugador : MonoBehaviour
         canDash = false;
         isDashing = true;
         tr.emitting = true;
+        _dashesLeft -= 1;
         dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (dashingDir == Vector2.zero)
         {

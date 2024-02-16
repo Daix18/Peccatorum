@@ -1895,6 +1895,7 @@ MonoBehaviour:
   maxJumps: 2
   _jumpsLeft: 0
   jumpingForce: 250
+  _maxFallSpeed: 25
   queEsSuelo:
     serializedVersion: 2
     m_Bits: 64
@@ -1902,6 +1903,8 @@ MonoBehaviour:
   dimensionesCaja: {x: 0.65, y: 0.01, z: 0}
   onGround: 0
   wallSlideSpeed: 1.5
+  maxDashes: 1
+  _dashesLeft: 0
   jumpForceWallX: 6
   jumpForceWallY: 12
   wallJumpTime: 0.2
