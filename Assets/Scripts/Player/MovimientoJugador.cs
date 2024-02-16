@@ -14,17 +14,17 @@ public class MovimientoJugador : MonoBehaviour
     [Range(0, 0.3f)][SerializeField] private float suavizadoDeMovimiento;
     private Vector3 velocidad = Vector3.zero;
     private bool mirandoDerecha = true;
+    private float _yVelReleaseMod = 2f;
 
     [Header("Salto")]
+    [SerializeField] private int maxJumps = 2;
+    [SerializeField] private int _jumpsLeft;
     [SerializeField] private float jumpingForce;
     [SerializeField] private LayerMask queEsSuelo;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
     [SerializeField] private bool onGround;
     private bool jump = false;
-
-    [Header("Double Jump")]
-    //Añadir variables para el doble salto
 
     [Header("Wall Slide Settings")]
     [SerializeField] private float wallSlideSpeed;
@@ -54,22 +54,17 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform lanzamientoPosicion;
     [SerializeField] private float fuerzaLanzamiento = 10f;
 
-    [Header("Coyote Time")]
-    [SerializeField] private float coyoteTime = 0.2f; // Tiempo adicional para permitir saltos después de salir del suelo
-    [SerializeField] private float jumpBufferTime = 0.1f; // Tiempo de buffering para aceptar saltos antes de tocar el suelo
-    private float coyoteTimeCounter; // Contador para el coyote time
-    private float jumpBufferCounter; // Contador para el buffering de salto
-
-
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<TrailRenderer>();
+        _jumpsLeft = maxJumps;
     }
 
     private void Update()
     {
         inputX = Input.GetAxisRaw("Horizontal");
+        bool jumpInputReleased = Input.GetButtonUp("Jump");
         movimientoHorizontal = inputX * speedMovement;
 
         if (isDashing)
@@ -78,42 +73,20 @@ public class MovimientoJugador : MonoBehaviour
             return;
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (jumpInputReleased && rb.velocity.y > 0)
         {
-            // Buffering de salto
-            if (onGround || coyoteTimeCounter > 0)
-            {
-                Jump();
-            }
-            else
-            {
-                // Iniciar el contador de buffering de salto
-                jumpBufferCounter = jumpBufferTime;
-            }
+            rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y / _yVelReleaseMod);
         }
 
-        if (jumpBufferCounter > 0)
+        if (Input.GetButtonDown("Jump") && _jumpsLeft > 0)
         {
-            // Reducir el contador de buffering de salto
-            jumpBufferCounter -= Time.deltaTime;
-
-            // Si el jugador toca el suelo mientras el buffer está activo, saltar
-            if (onGround)
-            {
-                Jump();
-            }
+            jump = true;
         }
 
-        // Actualizar el contador de coyote time
-        if (onGround)
+        if (onGround && rb.velocity.y <= 0)
         {
-            coyoteTimeCounter = coyoteTime;
+            _jumpsLeft = maxJumps;
         }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
-
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -123,7 +96,6 @@ public class MovimientoJugador : MonoBehaviour
         //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
-
             //Llamamos a la corrutina Dash
             StartCoroutine(Dash());
         }
@@ -171,7 +143,7 @@ public class MovimientoJugador : MonoBehaviour
             Flip();
         }
 
-        if (jumping && onGround && !wallSliding)
+        if (jumping && !wallSliding)
         {
             //Salto normal
             Jump();
@@ -182,7 +154,6 @@ public class MovimientoJugador : MonoBehaviour
         {
             //Salto en pared
             WallJump();
-            Debug.Log(rb.position.y);
         }
     }
 
@@ -190,6 +161,7 @@ public class MovimientoJugador : MonoBehaviour
     {
         onGround = false;
         rb.AddForce(new Vector2(0f, jumpingForce));
+        _jumpsLeft -= 1;
     }
 
     private void WallJump()

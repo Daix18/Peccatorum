@@ -1468,7 +1468,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792447399}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.56, z: 0}
+  m_LocalPosition: {x: 0, y: -0.508, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1892,16 +1892,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedMovement: 250
   suavizadoDeMovimiento: 0.03
+  maxJumps: 2
+  _jumpsLeft: 0
   jumpingForce: 250
   queEsSuelo:
     serializedVersion: 2
     m_Bits: 64
   groundChecker: {fileID: 792447400}
-  dimensionesCaja: {x: 0.65, y: 0.15, z: 0}
+  dimensionesCaja: {x: 0.65, y: 0.01, z: 0}
   onGround: 0
   wallSlideSpeed: 1.5
   jumpForceWallX: 6
-  jumpForceWallY: 8
+  jumpForceWallY: 12
   wallJumpTime: 0.2
   wallChecker: {fileID: 1378546703}
   wallBoxDimensions: {x: 0.5, y: 1.2, z: 0}
@@ -1911,8 +1913,6 @@ MonoBehaviour:
   knifePrefab: {fileID: 4170110281044481596, guid: 66b4af45dc90fa84398b7d285ebce0e7, type: 3}
   lanzamientoPosicion: {fileID: 629993786}
   fuerzaLanzamiento: 10
-  coyoteTime: 0.2
-  jumpBufferTime: 0.1
 --- !u!70 &988718710
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
