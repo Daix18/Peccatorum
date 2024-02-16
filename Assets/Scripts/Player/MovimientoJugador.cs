@@ -14,6 +14,7 @@ public class MovimientoJugador : MonoBehaviour
     [Range(0, 0.3f)][SerializeField] private float suavizadoDeMovimiento;
     private Vector3 velocidad = Vector3.zero;
     private bool mirandoDerecha = true;
+    private float _yVelReleaseMod = 2f;
 
     [Header("Salto")]
     [SerializeField] private int maxJumps = 2;
@@ -63,12 +64,18 @@ public class MovimientoJugador : MonoBehaviour
     private void Update()
     {
         inputX = Input.GetAxisRaw("Horizontal");
+        bool jumpInputReleased = Input.GetButtonUp("Jump");
         movimientoHorizontal = inputX * speedMovement;
 
         if (isDashing)
         {
             rb.velocity = dashingDir.normalized * dashingPower;
             return;
+        }
+
+        if (jumpInputReleased && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y / _yVelReleaseMod);
         }
 
         if (Input.GetButtonDown("Jump") && _jumpsLeft > 0)
