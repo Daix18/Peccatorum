@@ -1909,13 +1909,15 @@ MonoBehaviour:
   jumpForceWallY: 12
   wallJumpTime: 0.2
   wallChecker: {fileID: 1378546703}
-  wallBoxDimensions: {x: 0.5, y: 1.2, z: 0}
+  wallBoxDimensions: {x: 0.5, y: 0.59, z: 0}
   dashingPower: 24
   dashingTime: 0.2
   dashingCooldown: 1
   knifePrefab: {fileID: 4170110281044481596, guid: 66b4af45dc90fa84398b7d285ebce0e7, type: 3}
   lanzamientoPosicion: {fileID: 629993786}
   fuerzaLanzamiento: 10
+  coyoteTime: 0.061
+  jumpInputBufferTime: 0.06
 --- !u!70 &988718710
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

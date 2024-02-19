@@ -58,6 +58,12 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform lanzamientoPosicion;
     [SerializeField] private float fuerzaLanzamiento = 10f;
 
+    [Header("Coyote Time")]
+    [Range(0.01f, 0.5f)] [SerializeField] private float coyoteTime;
+    [Range(0.01f, 0.5f)] [SerializeField] private float jumpInputBufferTime;
+    private float lastOnGroundTime;
+    private float lastjumpTime;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -85,6 +91,7 @@ public class MovimientoJugador : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && _jumpsLeft > 0)
         {
+            lastjumpTime = jumpInputBufferTime;
             jump = true;
         }
 
@@ -149,6 +156,12 @@ public class MovimientoJugador : MonoBehaviour
             Vector3 velocidadObjetivo = new Vector2(mover, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, velocidadObjetivo, ref velocidad, suavizadoDeMovimiento);
         }
+        
+
+        if (onGround && jumping)
+        {
+            lastOnGroundTime = coyoteTime;
+        }
 
         if (mover > 0 && !mirandoDerecha)
         {
@@ -159,7 +172,8 @@ public class MovimientoJugador : MonoBehaviour
             Flip();
         }
 
-        if (jumping && !wallSliding)
+        //Comprobación para saltar que incluye el coyote jump.
+        if (jumping && !wallSliding && lastOnGroundTime > 0 && lastjumpTime > 0)
         {
             //Salto normal
             Jump();
