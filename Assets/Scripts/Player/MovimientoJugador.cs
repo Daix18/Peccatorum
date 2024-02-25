@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MovimientoJugador : MonoBehaviour
 {
+    private Controls controles;
     private Rigidbody2D rb;
     private TrailRenderer tr;
+    [Range(0f, 2f)] [SerializeField] private float timeScale;
 
     [Header("Movimiento")]
     [SerializeField] private float speedMovement;
     [Range(0, 0.3f)][SerializeField] private float suavizadoDeMovimiento;
     private float inputX;
-    private float movimientoHorizontal = 0f;
     private Vector3 velocidad = Vector3.zero;
+    private Vector2 direccion;
     private bool mirandoDerecha = true;
     private float _yVelReleaseMod = 2f;
     private float _aumentGravity = 1f;
@@ -26,6 +29,8 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
     [SerializeField] private bool onGround;
+    [SerializeField] private float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
     private bool jump = false;
 
     [Header("Wall Slide Settings")]
@@ -72,11 +77,18 @@ public class MovimientoJugador : MonoBehaviour
         _dashesLeft = maxDashes;
     }
 
+    private void Awake()
+    {
+        controles = new();
+    }
+
     private void Update()
     {
+        Time.timeScale = timeScale;
+        direccion = controles.Player.Mover.ReadValue<Vector2>();
+        //dash = controles.Playe.Mover.
         inputX = Input.GetAxisRaw("Horizontal");
         bool jumpInputReleased = Input.GetButtonUp("Jump");
-        movimientoHorizontal = inputX * speedMovement;
 
         if (isDashing)
         {
@@ -95,6 +107,15 @@ public class MovimientoJugador : MonoBehaviour
             jump = true;
         }
 
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
         if (onGround && rb.velocity.y <= 0)
         {
             _jumpsLeft = maxJumps;
@@ -102,7 +123,7 @@ public class MovimientoJugador : MonoBehaviour
             rb.gravityScale = 1;
         }
 
-        if (rb.velocity.y < 0)
+        if (rb.velocity.y < 2)
         {
             //Se aumenta la gravedad  cuando caes.
             rb.gravityScale = _aumentGravity * 1.5f;
@@ -123,6 +144,12 @@ public class MovimientoJugador : MonoBehaviour
             StartCoroutine(Dash());
         }
 
+        //Salto Buffer
+        if (Input.GetButtonDown("Jump") && _jumpsLeft == 0 && jumpBufferCounter > 0)
+        {
+            Jump(default);
+        }
+
         if (!onGround && onWall && inputX != 0)
         {
             wallSliding = true;
@@ -137,9 +164,9 @@ public class MovimientoJugador : MonoBehaviour
     {
         onGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
 
-        Move(movimientoHorizontal * Time.fixedDeltaTime, jump);
-
         onWall = Physics2D.OverlapBox(wallChecker.position, wallBoxDimensions, 0f, queEsSuelo);
+
+        Move(direccion);
 
         jump = false;
 
@@ -149,55 +176,59 @@ public class MovimientoJugador : MonoBehaviour
         }
     }
 
-    private void Move(float mover, bool jumping)
+    private void Move(Vector2 direccion)
     {
         if (!wallJumping)
         {
-            Vector3 velocidadObjetivo = new Vector2(mover, rb.velocity.y);
+            Vector3 velocidadObjetivo = new Vector2(direccion.x * speedMovement, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, velocidadObjetivo, ref velocidad, suavizadoDeMovimiento);
         }
-        
 
-        if (onGround && jumping)
+
+        if (onGround && jump)
         {
             lastOnGroundTime = coyoteTime;
         }
 
-        if (mover > 0 && !mirandoDerecha)
+        if (direccion.x > 0 && !mirandoDerecha)
         {
             Flip();
         }
-        else if (mover < 0 && mirandoDerecha)
+        else if (direccion.x < 0 && mirandoDerecha)
         {
             Flip();
         }
 
         //Comprobación para saltar que incluye el coyote jump.
-        if (jumping && !wallSliding && lastOnGroundTime > 0 && lastjumpTime > 0)
+        if (jump && !wallSliding)
         {
             //Salto normal
-            Jump();
+            Jump(default);
         }
 
         //La diferencia en este if es la exclamación
-        if (jumping && onWall && wallSliding)
+        if (jump && onWall && wallSliding)
         {
             //Salto en pared
             WallJump();
         }
     }
 
-    private void Jump()
+    private void Jump(InputAction.CallbackContext context)
     {
-        onGround = false;
-        rb.AddForce(new Vector2(0f, jumpingForce));
-        _jumpsLeft -= 1;
+        if (_jumpsLeft > 0)
+        {
+            onGround = false;
+            rb.AddForce(new Vector2(0f, jumpingForce));
+            _jumpsLeft -= 1;
+        }
     }
 
     private void WallJump()
     {
         onWall = false;
         rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
+        jumpBufferCounter = 0f;
         StartCoroutine(WallJumpChange());
     }
 
@@ -215,6 +246,20 @@ public class MovimientoJugador : MonoBehaviour
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
         rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
+    }
+
+    //Cuando entremos en al escena, los controles se cargan
+    private void OnEnable()
+    {
+        controles.Enable();
+        controles.Player.Jump.started += Jump;
+    }
+
+    //Cuando salgamos de la escena, los controles se desactivan
+    private void OnDisable()
+    {
+        controles.Disable();
+        controles.Player.Jump.started -= Jump;
     }
 
     private void OnDrawGizmos()

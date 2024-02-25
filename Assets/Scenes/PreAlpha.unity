@@ -1671,6 +1671,7 @@ GameObject:
   - component: {fileID: 988718707}
   - component: {fileID: 988718702}
   - component: {fileID: 988718710}
+  - component: {fileID: 988718712}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1890,7 +1891,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b8b5e42b2eba134497ad8484303c9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMovement: 250
+  timeScale: 1
+  speedMovement: 6
   suavizadoDeMovimiento: 0.03
   maxJumps: 2
   _jumpsLeft: 0
@@ -1902,6 +1904,7 @@ MonoBehaviour:
   groundChecker: {fileID: 792447400}
   dimensionesCaja: {x: 0.65, y: 0.01, z: 0}
   onGround: 0
+  jumpBufferTime: 0.6
   wallSlideSpeed: 1.5
   maxDashes: 1
   _dashesLeft: 0
@@ -1951,6 +1954,48 @@ MonoBehaviour:
   "da\xF1oGolpe": 20
   tiempoEntreAtaques: 0.3
   tiempoSiguienteAtaque: 0
+--- !u!114 &988718712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988718701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 2c0d830c6e46df441ab681903850b4a8, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9a771b4-9b35-49db-88b8-c6eef5689e20
+    m_ActionName: Player/Mover[/Keyboard/a,/Keyboard/d,/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2738371b-db51-4b66-a326-17efa3e731a5
+    m_ActionName: Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 612717d8-655b-4706-be94-654613cf0fbf
+    m_ActionName: Player/Dash[/Keyboard/leftShift]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1367353338
 GameObject:
   m_ObjectHideFlags: 0
