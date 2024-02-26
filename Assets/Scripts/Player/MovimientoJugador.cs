@@ -137,11 +137,11 @@ public class MovimientoJugador : MonoBehaviour
             LanzarCuchillo();
         }
 
-        //Si presionamos el LeftShift y si podemos hacer un dash, realizamos un dash.
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && _dashesLeft > 0)
+        // Si presionamos el LeftShift y podemos hacer un dash y hay dashes restantes disponibles
+        if (Keyboard.current.leftShiftKey.wasPressedThisFrame && canDash && _dashesLeft > 0)
         {
-            //Llamamos a la corrutina Dash
-            StartCoroutine(Dash());
+            // Llamamos a la corrutina Dash
+            StartCoroutine(Dash(default));
         }
 
         //Salto Buffer
@@ -248,11 +248,18 @@ public class MovimientoJugador : MonoBehaviour
         rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
+    private void OnDashStarted(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            StartCoroutine(Dash(context));
+        }
+    }
+
     //Cuando entremos en al escena, los controles se cargan
     private void OnEnable()
     {
         controles.Enable();
-        controles.Player.Jump.started += Jump;
     }
 
     //Cuando salgamos de la escena, los controles se desactivan
@@ -260,6 +267,7 @@ public class MovimientoJugador : MonoBehaviour
     {
         controles.Disable();
         controles.Player.Jump.started -= Jump;
+        controles.Player.Dash.started -= OnDashStarted;
     }
 
     private void OnDrawGizmos()
@@ -276,7 +284,7 @@ public class MovimientoJugador : MonoBehaviour
         wallJumping = false;
     }
 
-    IEnumerator Dash()
+    IEnumerator Dash(InputAction.CallbackContext context)
     {
         canDash = false;
         isDashing = true;
