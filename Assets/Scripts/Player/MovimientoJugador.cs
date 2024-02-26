@@ -126,10 +126,10 @@ public class MovimientoJugador : MonoBehaviour
         if (rb.velocity.y < 2)
         {
             //Se aumenta la gravedad  cuando caes.
-            rb.gravityScale = _aumentGravity * 1.5f;
+          // rb.gravityScale = _aumentGravity * 1.5f;
 
             //Se limita la velocidad de caída en el eje Y.
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -_maxFallSpeed));
+            //rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -_maxFallSpeed));
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -226,11 +226,12 @@ public class MovimientoJugador : MonoBehaviour
 
     private void WallJump()
     {
-        onWall = false;
-        rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
-        jumpBufferCounter = 0f;
-        StartCoroutine(WallJumpChange());
+        //onWall = false;
+        //rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
+        //jumpBufferCounter = 0f;
+        //StartCoroutine(WallJumpChange());
     }
+    
 
     private void Flip()
     {
