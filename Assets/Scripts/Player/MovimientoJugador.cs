@@ -248,11 +248,14 @@ public class MovimientoJugador : MonoBehaviour
         rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
-    private void OnDashStarted(InputAction.CallbackContext context)
+    private void StartDash(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            StartCoroutine(Dash(context));
+            if (_dashesLeft > 0)
+            {
+                StartCoroutine(Dash(context));
+            }
         }
     }
 
@@ -260,6 +263,7 @@ public class MovimientoJugador : MonoBehaviour
     private void OnEnable()
     {
         controles.Enable();
+        controles.Player.Dash.started += StartDash;
     }
 
     //Cuando salgamos de la escena, los controles se desactivan
@@ -267,7 +271,7 @@ public class MovimientoJugador : MonoBehaviour
     {
         controles.Disable();
         controles.Player.Jump.started -= Jump;
-        controles.Player.Dash.started -= OnDashStarted;
+        controles.Player.Dash.started -= StartDash;
     }
 
     private void OnDrawGizmos()
@@ -289,7 +293,7 @@ public class MovimientoJugador : MonoBehaviour
         canDash = false;
         isDashing = true;
         tr.emitting = true;
-        _dashesLeft -= 1;
+        _dashesLeft--;
         dashingDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (dashingDir == Vector2.zero)
         {
