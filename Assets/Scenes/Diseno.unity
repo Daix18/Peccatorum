@@ -1094,7 +1094,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundChecker: {fileID: 792447400}
-  dimensionesCaja: {x: 0, y: 0, z: 0}
+  dimensionesCaja: {x: 0.6, y: 0, z: 0}
   onGround: 0
   jumpBufferTime: 0.6
   wallSlideSpeed: 1.5
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   jumpForceWallY: 12
   wallJumpTime: 0.2
   wallChecker: {fileID: 1378546703}
-  wallBoxDimensions: {x: 0.6, y: 0.6, z: 0}
+  wallBoxDimensions: {x: 0.48, y: 0.48, z: 0}
   dashingPower: 24
   dashingTime: 0.2
   dashingCooldown: 1

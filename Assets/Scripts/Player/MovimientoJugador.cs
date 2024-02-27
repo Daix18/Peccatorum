@@ -226,10 +226,9 @@ public class MovimientoJugador : MonoBehaviour
 
     private void WallJump()
     {
-        //onWall = false;
-        //rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
-        //jumpBufferCounter = 0f;
-        //StartCoroutine(WallJumpChange());
+        onWall = false;
+        rb.velocity = new Vector2(jumpForceWallX * -inputX, jumpForceWallY);
+        StartCoroutine(WallJumpChange());
     }
     
 
