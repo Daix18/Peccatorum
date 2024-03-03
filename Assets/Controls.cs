@@ -57,7 +57,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""AD"",
+                    ""name"": ""AWD"",
                     ""id"": ""f92261fa-458b-4378-a227-80030271b4a7"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -66,6 +66,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Mover"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""bb43e795-14d7-4599-8c7d-7656c9c15ef7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mover"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""9b0e296e-5b38-4f2e-83d9-97318d245b04"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mover"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",

@@ -882,14 +882,14 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
-  m_Mass: 0.77629006
+  m_UseAutoMass: 0
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 6200000, guid: e07ceb3c2ce2fc44bb7d56345e72a160, type: 2}
   m_Interpolate: 1
-  m_SleepingMode: 0
+  m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &988718704
@@ -960,6 +960,7 @@ Transform:
   - {fileID: 1378546703}
   - {fileID: 629993786}
   - {fileID: 2130672350}
+  - {fileID: 1673838354}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1088,7 +1089,7 @@ MonoBehaviour:
   suavizadoDeMovimiento: 0
   maxJumps: 2
   _jumpsLeft: 0
-  jumpingForce: 280
+  jumpingForce: 5.5
   _maxFallSpeed: 500
   queEsSuelo:
     serializedVersion: 2
@@ -1099,15 +1100,16 @@ MonoBehaviour:
   jumpBufferTime: 0.6
   wallSlideSpeed: 1.5
   maxDashes: 1
-  _dashesLeft: 0
   jumpForceWallX: 6
   jumpForceWallY: 12
   wallJumpTime: 0.2
   wallChecker: {fileID: 1378546703}
   wallBoxDimensions: {x: 0.48, y: 0.48, z: 0}
-  dashingPower: 24
+  dashingPower: 20
   dashingTime: 0.2
   dashingCooldown: 1
+  dashGravity: 0
+  _dashesLeft: 0
   knifePrefab: {fileID: 4170110281044481596, guid: 66b4af45dc90fa84398b7d285ebce0e7, type: 3}
   lanzamientoPosicion: {fileID: 629993786}
   fuerzaLanzamiento: 10
@@ -1180,7 +1182,19 @@ MonoBehaviour:
     m_ActionId: 2738371b-db51-4b66-a326-17efa3e731a5
     m_ActionName: Player/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 988718709}
+        m_TargetAssemblyTypeName: MovimientoJugador, Assembly-CSharp
+        m_MethodName: StartDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 612717d8-655b-4706-be94-654613cf0fbf
     m_ActionName: Player/Dash[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
@@ -1280,6 +1294,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7334f648e79b56d479aea8b4e4bc892c, type: 3}
+--- !u!1 &1673838353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1673838354}
+  m_Layer: 0
+  m_Name: BackWallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1673838354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673838353}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.85, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 988718705}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1951630100
 GameObject:
   m_ObjectHideFlags: 0
