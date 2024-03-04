@@ -18,6 +18,7 @@ public class MovimientoJugador : MonoBehaviour
     private Vector3 velocidad = Vector3.zero;
     private Vector2 direccion;
     private bool mirandoDerecha = true;
+    [SerializeField]private bool canMoveSideways = true;
 
     [Header("Salto")]
     [SerializeField] private int _jumpsLeft;
@@ -40,7 +41,6 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private bool wallSliding;
 
     [Header("Wall Jump Settings")]
-    [SerializeField] private int maxDashes = 1;
     [SerializeField] private float jumpForceWallX;
     [SerializeField] private float jumpForceWallY;
     [SerializeField] private float wallJumpTime;
@@ -51,6 +51,7 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private Vector3 wallBoxDimensions;
 
     [Header("Dash Settings")]
+    [SerializeField] private int maxDashes = 1;
     [SerializeField] private float dashingPower = 24f;
     [SerializeField] private float dashingTime = 0.2f;
     [SerializeField] private float dashingCooldown = 1f;
@@ -95,7 +96,7 @@ public class MovimientoJugador : MonoBehaviour
         {
             _jumpsLeft = maxJumps;
             _dashesLeft = maxDashes;
-            rb.gravityScale = 1;
+            //rb.gravityScale = 1;
             //jump = false;
         }
 
@@ -137,7 +138,6 @@ public class MovimientoJugador : MonoBehaviour
             {
                 //Salto en pared
                 WallJump();
-                Debug.Log("Wall Jump");
             }
         }        
     }
@@ -171,6 +171,12 @@ public class MovimientoJugador : MonoBehaviour
         //    lastOnGroundTime = coyoteTime;
         //}
 
+        if (!canMoveSideways)
+        {
+            //Se evita que el jugador 
+            direccion.x = 0;
+        }
+
         if (direccion.x > 0 && !mirandoDerecha)
         {
             Flip();
@@ -191,20 +197,21 @@ public class MovimientoJugador : MonoBehaviour
             //jump = true;
         }
     }
-
-    private void WallJump()
-    {
-        onWall = false;
-        rb.velocity = new Vector2(jumpForceWallX * -direccion.x, jumpForceWallY);
-        StartCoroutine(WallJumpChange());
-    }
-
     private void Flip()
     {
         mirandoDerecha = !mirandoDerecha;
         Vector3 escala = transform.localScale;
         escala.x *= -1;
         transform.localScale = escala;
+    }
+
+    private void WallJump()
+    {
+        onWall = false;
+        canMoveSideways = false;
+        rb.velocity = new Vector2(-direccion.x * jumpForceWallX, jumpForceWallY);
+        Debug.Log("Wall Jump");
+        StartCoroutine(WallJumpChange());        
     }
 
     public void Dash()
@@ -297,10 +304,14 @@ public class MovimientoJugador : MonoBehaviour
         Gizmos.DrawWireCube(wallChecker.position, wallBoxDimensions);
     }
 
+    //Corrutinas:
+
+    //Corrutina del cambio de WallJump
     IEnumerator WallJumpChange()
     {
         wallJumping = true;
         yield return new WaitForSeconds(wallJumpTime);
         wallJumping = false;
+        //canMoveSideways = true;
     }
 }
