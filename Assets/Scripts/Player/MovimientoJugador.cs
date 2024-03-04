@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +7,7 @@ public class MovimientoJugador : MonoBehaviour
     private Controls controles;
     private Rigidbody2D rb;
     private TrailRenderer tr;
-    [Range(0f, 2f)] [SerializeField] private float timeScale;
+    [Range(0f, 2f)][SerializeField] private float timeScale;
 
     [Header("Movimiento")]
     [SerializeField] private float speedMovement;
@@ -21,31 +20,31 @@ public class MovimientoJugador : MonoBehaviour
     private bool mirandoDerecha = true;
 
     [Header("Salto")]
-    [SerializeField] private int maxJumps = 2;
     [SerializeField] private int _jumpsLeft;
+    [SerializeField] private int maxJumps = 2;
     [SerializeField] private float jumpingForce;
     [SerializeField] private float _maxFallSpeed;
+    [SerializeField] private float fallMultiplier = 2.5f;
+    [SerializeField] private float lowJumpMultiplier = 2f;
+    [SerializeField] private float jumpBufferTime = 0.2f;
     [SerializeField] private LayerMask queEsSuelo;
     [SerializeField] private Transform groundChecker;
     [SerializeField] private Vector3 dimensionesCaja;
     [SerializeField] private bool onGround;
-    [SerializeField] private float jumpBufferTime = 0.2f;
+    //private bool jump = false;
     private float jumpBufferCounter;
-    private float fallMultiplier = 2.5f;
-    private float lowJumpMultiplier = 2f;
-    private bool jump = false;
 
     [Header("Wall Slide Settings")]
     [SerializeField] private float wallSlideSpeed;
-    private bool onWall;
-    private bool wallSliding;
+    [SerializeField] private bool onWall;
+    [SerializeField] private bool wallSliding;
 
     [Header("Wall Jump Settings")]
     [SerializeField] private int maxDashes = 1;
     [SerializeField] private float jumpForceWallX;
     [SerializeField] private float jumpForceWallY;
     [SerializeField] private float wallJumpTime;
-    private bool wallJumping;
+    [SerializeField] private bool wallJumping;
 
     [Header("SaltoPared")]
     [SerializeField] private Transform wallChecker;
@@ -68,8 +67,8 @@ public class MovimientoJugador : MonoBehaviour
     [SerializeField] private float fuerzaLanzamiento = 10f;
 
     [Header("Coyote Time")]
-    [Range(0.01f, 0.5f)] [SerializeField] private float coyoteTime;
-    [Range(0.01f, 0.5f)] [SerializeField] private float jumpInputBufferTime;
+    [Range(0.01f, 0.5f)][SerializeField] private float coyoteTime;
+    [Range(0.01f, 0.5f)][SerializeField] private float jumpInputBufferTime;
     private float lastOnGroundTime;
     private float lastjumpTime;
 
@@ -91,42 +90,19 @@ public class MovimientoJugador : MonoBehaviour
     {
         waitTime += Time.deltaTime;
         Time.timeScale = timeScale;
-        direccion = controles.Player.Mover.ReadValue<Vector2>();
-
-        //if (isDashing)
-        //{
-        //    // Aplicar la velocidad del dash
-        //    rb.velocity = dashingDir * dashingPower;
-        //    return;
-        //}
-
-        //if (jumpInputReleased && rb.velocity.y > 0)
-        //{
-        //    rb.velocity = new Vector2 (rb.velocity.x, rb.velocity.y / _yVelReleaseMod);
-        //}
-
-        if (Input.GetButtonDown("Jump") && _jumpsLeft > 0)
-        {
-            lastjumpTime = jumpInputBufferTime;
-            jump = true;
-        }
-
-        else
-        {
-            jumpBufferCounter -= Time.deltaTime;
-        }
 
         if (onGround && rb.velocity.y <= 0)
         {
             _jumpsLeft = maxJumps;
             _dashesLeft = maxDashes;
             rb.gravityScale = 1;
+            //jump = false;
         }
 
         //Si el jugador está cayendo, se multiplica la gravedad y se le resta 1, para que este proporcionada a la gravedad.
         if (rb.velocity.y < 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1)  * Time.deltaTime;
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
         //En el caso de que el jugador está ascendiendo y no se presiona el salto, el salto es más suave.
         else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
@@ -139,19 +115,11 @@ public class MovimientoJugador : MonoBehaviour
             LanzarCuchillo();
         }
 
-        //// Si presionamos el LeftShift y podemos hacer un dash y hay dashes restantes disponibles
-        //if (Keyboard.current.leftShiftKey.wasPressedThisFrame && canDash && _dashesLeft > 0)
+        ////Salto Buffer
+        //if (Input.GetButtonDown("Jump") && _jumpsLeft == 0 && jumpBufferCounter > 0)
         //{
-        //    // Llamamos a la corrutina Dash
-        //    StartDash();
-        //    Debug.Log("Velocidad: " + rb.velocity);
+        //    Jump();
         //}
-
-        //Salto Buffer
-        if (Input.GetButtonDown("Jump") && _jumpsLeft == 0 && jumpBufferCounter > 0)
-        {
-            Jump(default);
-        }
 
         if (!onGround && onWall && direccion.x != 0)
         {
@@ -161,6 +129,17 @@ public class MovimientoJugador : MonoBehaviour
         {
             wallSliding = false;
         }
+
+        //Si no ha hecho un wall jump, está pegado en una pared y está haciendo un wall Slide, se hace un wall Jump.
+        if (!wallJumping && onWall && wallSliding)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                //Salto en pared
+                WallJump();
+                Debug.Log("Wall Jump");
+            }
+        }        
     }
 
     private void FixedUpdate()
@@ -169,29 +148,28 @@ public class MovimientoJugador : MonoBehaviour
 
         onWall = Physics2D.OverlapBox(wallChecker.position, wallBoxDimensions, 0f, queEsSuelo);
 
-        Move(direccion);
-
-        jump = false;
-
-        if (wallSliding)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
-        }
-    }
-
-    private void Move(Vector2 direccion)
-    {
+        //Se aplica el moviemiento del jugador, en terminos de velocidad.
         if (!wallJumping && !isDashing)
         {
             Vector3 velocidadObjetivo = new Vector2(direccion.x * speedMovement, rb.velocity.y);
             rb.velocity = Vector3.SmoothDamp(rb.velocity, velocidadObjetivo, ref velocidad, suavizadoDeMovimiento);
         }
 
-
-        if (onGround && jump)
+        if (wallSliding)
         {
-            lastOnGroundTime = coyoteTime;
+            wallJumping = false;
+            rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
         }
+    }
+
+    private void Move()
+    {
+        direccion = controles.Player.Mover.ReadValue<Vector2>();
+
+        //if (onGround && jump)
+        //{
+        //    lastOnGroundTime = coyoteTime;
+        //}
 
         if (direccion.x > 0 && !mirandoDerecha)
         {
@@ -201,29 +179,16 @@ public class MovimientoJugador : MonoBehaviour
         {
             Flip();
         }
-
-        //Comprobación para saltar que incluye el coyote jump.
-        if (jump && !wallSliding)
-        {
-            //Salto normal
-            Jump(default);
-        }
-
-        //La diferencia en este if es la exclamación
-        if (jump && onWall && wallSliding)
-        {
-            //Salto en pared
-            WallJump();
-        }
     }
 
-    private void Jump(InputAction.CallbackContext context)
+    private void Jump()
     {
         if (_jumpsLeft > 0)
         {
             onGround = false;
             rb.velocity = new Vector2(0f, jumpingForce);
             _jumpsLeft -= 1;
+            //jump = true;
         }
     }
 
@@ -233,7 +198,7 @@ public class MovimientoJugador : MonoBehaviour
         rb.velocity = new Vector2(jumpForceWallX * -direccion.x, jumpForceWallY);
         StartCoroutine(WallJumpChange());
     }
-    
+
     private void Flip()
     {
         mirandoDerecha = !mirandoDerecha;
@@ -264,6 +229,23 @@ public class MovimientoJugador : MonoBehaviour
         Invoke("StopDash", dashingTime);
     }
 
+    //Estas funciones son llamadas desde el componente de player input, el cual lo contiene el player.
+    //Para verlas le damos a evet
+    public void StartMove(InputAction.CallbackContext context)
+    {
+        Move();
+    }
+
+    public void StartJump(InputAction.CallbackContext context)
+    {
+        //Comprobación para saltar que incluye el coyote jump.
+        if (context.performed && !wallSliding)
+        {
+            //Salto normal
+            Jump();
+        }
+    }
+
     public void StartDash(InputAction.CallbackContext context)
     {
         if (context.performed && canDash)
@@ -271,7 +253,7 @@ public class MovimientoJugador : MonoBehaviour
             if (waitTime >= dashingCooldown)
             {
                 waitTime = 0;
-                Invoke("Dash", 0);  
+                Invoke("Dash", 0);
             }
         }
     }

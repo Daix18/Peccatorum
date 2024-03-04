@@ -57,7 +57,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""AWD"",
+                    ""name"": ""WSAD"",
                     ""id"": ""f92261fa-458b-4378-a227-80030271b4a7"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
