@@ -1087,6 +1087,7 @@ MonoBehaviour:
   timeScale: 1
   speedMovement: 8
   suavizadoDeMovimiento: 0
+  canMoveSideways: 1
   _jumpsLeft: 0
   maxJumps: 2
   jumpingForce: 5.5
@@ -1103,8 +1104,8 @@ MonoBehaviour:
   wallSlideSpeed: 1.5
   onWall: 0
   wallSliding: 0
-  jumpForceWallX: 8
-  jumpForceWallY: 10
+  jumpForceWallX: 6
+  jumpForceWallY: 6
   wallJumpTime: 0.2
   wallJumping: 0
   wallChecker: {fileID: 1378546703}

@@ -155,7 +155,7 @@ public class MovimientoJugador : MonoBehaviour
             rb.velocity = Vector3.SmoothDamp(rb.velocity, velocidadObjetivo, ref velocidad, suavizadoDeMovimiento);
         }
 
-        if (wallSliding)
+        if (!wallJumping && wallSliding)
         {
             wallJumping = false;
             rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
