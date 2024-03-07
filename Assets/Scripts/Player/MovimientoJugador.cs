@@ -11,6 +11,9 @@ public class MovimientoJugador : MonoBehaviour
 
     [Header("Movimiento")]
     [SerializeField] private float speedMovement;
+    [SerializeField] private float speedGroundMovement;
+    [SerializeField] private float speedAirMovement;
+
     [Range(0, 0.3f)][SerializeField] private float suavizadoDeMovimiento;
     //private float inputX;
     //private float inputY;
@@ -18,7 +21,6 @@ public class MovimientoJugador : MonoBehaviour
     private Vector3 velocidad = Vector3.zero;
     private Vector2 direccion;
     private bool mirandoDerecha = true;
-    [SerializeField]private bool canMoveSideways = true;
 
     [Header("Salto")]
     [SerializeField] private int _jumpsLeft;
@@ -111,10 +113,6 @@ public class MovimientoJugador : MonoBehaviour
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            LanzarCuchillo();
-        }
 
         ////Salto Buffer
         //if (Input.GetButtonDown("Jump") && _jumpsLeft == 0 && jumpBufferCounter > 0)
@@ -148,6 +146,11 @@ public class MovimientoJugador : MonoBehaviour
 
         onWall = Physics2D.OverlapBox(wallChecker.position, wallBoxDimensions, 0f, queEsSuelo);
 
+        if (onGround)
+            speedMovement = speedGroundMovement;
+        else
+            speedMovement = speedAirMovement;
+
         //Se aplica el moviemiento del jugador, en terminos de velocidad.
         if (!wallJumping && !isDashing)
         {
@@ -171,12 +174,6 @@ public class MovimientoJugador : MonoBehaviour
         //    lastOnGroundTime = coyoteTime;
         //}
 
-        if (!canMoveSideways)
-        {
-            //Se evita que el jugador 
-            direccion.x = 0;
-        }
-
         if (direccion.x > 0 && !mirandoDerecha)
         {
             Flip();
@@ -195,6 +192,7 @@ public class MovimientoJugador : MonoBehaviour
             rb.velocity = new Vector2(0f, jumpingForce);
             _jumpsLeft -= 1;
             //jump = true;
+            Debug.Log("Salto");
         }
     }
     private void Flip()
@@ -208,7 +206,6 @@ public class MovimientoJugador : MonoBehaviour
     private void WallJump()
     {
         onWall = false;
-        canMoveSideways = false;
         rb.velocity = new Vector2(-direccion.x * jumpForceWallX, jumpForceWallY);
         Debug.Log("Wall Jump");
         StartCoroutine(WallJumpChange());        
@@ -234,6 +231,13 @@ public class MovimientoJugador : MonoBehaviour
         }
 
         Invoke("StopDash", dashingTime);
+    }
+    void LanzarCuchillo()
+    {
+        GameObject projectile = Instantiate(knifePrefab, lanzamientoPosicion.position, Quaternion.identity);
+        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
+        rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
     //Estas funciones son llamadas desde el componente de player input, el cual lo contiene el player.
@@ -265,6 +269,14 @@ public class MovimientoJugador : MonoBehaviour
         }
     }
 
+    public void StartKnife(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            LanzarCuchillo();
+        }
+    }
+
     public void StopDash()
     {
         canDash = true;
@@ -272,13 +284,6 @@ public class MovimientoJugador : MonoBehaviour
         tr.emitting = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = normalGravity;
-    }
-    void LanzarCuchillo()
-    {
-        GameObject projectile = Instantiate(knifePrefab, lanzamientoPosicion.position, Quaternion.identity);
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        // Asumiendo que el personaje mira hacia la derecha. Si no, necesitarás ajustar la dirección basándote en la orientación del personaje.
-        rb.velocity = new Vector2(transform.localScale.x * fuerzaLanzamiento, 0);
     }
 
     //Cuando entremos en al escena, los controles se cargan

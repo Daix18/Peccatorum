@@ -3,6 +3,7 @@ using UnityEngine;
 public class AttackController : MonoBehaviour
 {
     [SerializeField] private Transform controladorGolpe;
+    [SerializeField] private float health;
     [SerializeField] private float radioGolpe;
     [SerializeField] private float dañoGolpe;
     [SerializeField] private float tiempoEntreAtaques;
@@ -25,6 +26,16 @@ public class AttackController : MonoBehaviour
         {
             Golpe();
             tiempoSiguienteAtaque = tiempoEntreAtaques;
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 

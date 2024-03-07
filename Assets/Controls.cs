@@ -53,6 +53,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Knife"",
+                    ""type"": ""Button"",
+                    ""id"": ""93f99d8f-d6c4-4ab9-9e40-fba7dc588ff7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -165,6 +174,50 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5851483-814a-4c31-bf26-1402de268668"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4330a0ef-5b1e-4327-915b-bc266d3cb504"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Knife"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07b6081f-7ca7-42db-b62e-2c9730a8e75d"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Knife"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8dfcdbb8-c662-4f52-b5fd-50f32500808e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Knife"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -176,6 +229,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Mover = m_Player.FindAction("Mover", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_Knife = m_Player.FindAction("Knife", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -240,6 +294,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Mover;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_Knife;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -247,6 +302,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Mover => m_Wrapper.m_Player_Mover;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @Knife => m_Wrapper.m_Player_Knife;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -265,6 +321,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @Knife.started += instance.OnKnife;
+            @Knife.performed += instance.OnKnife;
+            @Knife.canceled += instance.OnKnife;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -278,6 +337,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @Knife.started -= instance.OnKnife;
+            @Knife.performed -= instance.OnKnife;
+            @Knife.canceled -= instance.OnKnife;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -300,5 +362,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnMover(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnKnife(InputAction.CallbackContext context);
     }
 }
