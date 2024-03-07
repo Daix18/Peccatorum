@@ -21,7 +21,10 @@ public class Peste_CaminarBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        rb.velocity = new Vector2(speedMovement,rb.velocity.y) * animator.transform.right;
+        // Mantener la velocidad en el eje Y igual a la velocidad actual
+        float currentYVelocity = rb.velocity.y;
+
+        rb.velocity = new Vector2(speedMovement * animator.transform.right.x, currentYVelocity);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

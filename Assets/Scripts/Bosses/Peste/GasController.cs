@@ -29,6 +29,7 @@ public class GasController : MonoBehaviour
         {
             if (collision.CompareTag("Player"))
             {
+                Debug.Log("Se ha restado vida");
                 collision.GetComponent<AttackController>().TakeDamage(gasDamage);
             }
         }
@@ -39,5 +40,4 @@ public class GasController : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(attackController.position, gasRadius);
     }
-
 }

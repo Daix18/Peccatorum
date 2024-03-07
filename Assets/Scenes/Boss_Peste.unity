@@ -502,7 +502,6 @@ GameObject:
   m_Component:
   - component: {fileID: 636515931}
   - component: {fileID: 636515932}
-  - component: {fileID: 636515933}
   m_Layer: 0
   m_Name: Gas
   m_TagString: Untagged
@@ -533,7 +532,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 636515930}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -568,7 +567,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.25652528, g: 1, b: 0, a: 0.34117648}
+  m_Color: {r: 0.25652528, g: 1, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -578,22 +577,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &636515933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636515930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1206dd039afbdf4da75c7cc0e867ee0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackController: {fileID: 1807291732}
-  gasDamage: 0
-  gasRadius: 1
-  gasDuration: 0
 --- !u!1 &704800005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1467,6 +1450,7 @@ GameObject:
   - component: {fileID: 1194393902}
   - component: {fileID: 1194393901}
   - component: {fileID: 1194393905}
+  - component: {fileID: 1194393907}
   - component: {fileID: 1194393906}
   - component: {fileID: 1194393904}
   - component: {fileID: 1194393903}
@@ -1612,7 +1596,13 @@ MonoBehaviour:
   attackController: {fileID: 841371831}
   attackRadius: 0.29
   attackDamage: 10
-  jumpForce: 10
+  jumpForce: 8
+  cooldownTime: 1.5
+  cooldown: 0
+  doubleJumped: 0
+  fallMultiplier: 2.5
+  duration: 0
+  stunCooldownTime: 1.5
 --- !u!95 &1194393906
 Animator:
   serializedVersion: 5
@@ -1634,6 +1624,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1194393907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194393900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1206dd039afbdf4da75c7cc0e867ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackController: {fileID: 1807291732}
+  gasDamage: 20
+  gasRadius: 0
+  gasDuration: 4
 --- !u!1 &1340841593
 GameObject:
   m_ObjectHideFlags: 0

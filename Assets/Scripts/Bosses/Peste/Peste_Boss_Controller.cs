@@ -18,7 +18,14 @@ public class Peste_Boss_Controller : MonoBehaviour
     [SerializeField] private float attackDamage;
     [Header("Jump Settings")]
     [SerializeField] private float jumpForce = 10f;
-    public bool cooldown;
+    [SerializeField] private float cooldownTime = 1.5f;
+    [SerializeField] private bool cooldown = true;
+    [SerializeField] private bool doubleJumped;
+    [Header("Gas Ability")]
+    [SerializeField] private float fallMultiplier = 2.5f;
+    [SerializeField] private float duration;
+    [Header("Stun Settings")]
+    [SerializeField] private float stunCooldownTime = 1.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,9 +37,15 @@ public class Peste_Boss_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distancePlayer = Vector2.Distance(transform.position, player.position);
+        float distancePlayer = Mathf.Abs(transform.position.x - player.position.x);
         animator.SetFloat("playerDistance", distancePlayer);
         animator.SetBool("Cooldown", cooldown);
+        animator.SetBool("doubleJumped", doubleJumped);
+
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
     }
     private void Death()
     {
@@ -59,6 +72,13 @@ public class Peste_Boss_Controller : MonoBehaviour
         rb.velocity = Vector2.up * jumpForce;        
     }
 
+    public void SecondJump()
+    {
+        // Aplicar fuerza al jefe para realizar el double jump
+        rb.velocity = Vector2.up * jumpForce;
+        StartCoroutine(CooldownChange());
+    }
+
     public void Attack()
     {
         Collider2D[] objects = Physics2D.OverlapCircleAll(attackController.position, attackRadius);
@@ -70,6 +90,24 @@ public class Peste_Boss_Controller : MonoBehaviour
                 collision.GetComponent<AttackController>().TakeDamage(attackDamage);
             }
         }
+    }
+
+    public void Down()
+    {
+        // Detener el movimiento horizontal del jefe
+        rb.velocity = new Vector2(0f, rb.velocity.y);
+
+        // Aplicar una fuerza hacia abajo para una caída rápida
+        rb.AddForce(Vector2.down * jumpForce * fallMultiplier, ForceMode2D.Impulse);
+
+        doubleJumped = true;
+    }
+
+    IEnumerator CooldownChange()
+    {
+        cooldown = true;       
+        yield return new WaitForSeconds(cooldownTime);
+        cooldown = false;
     }
 
     private void OnDrawGizmos()
