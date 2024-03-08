@@ -24,8 +24,7 @@ public class Peste_Boss_Controller : MonoBehaviour
     [Header("Gas Ability")]
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float duration;
-    [Header("Stun Settings")]
-    [SerializeField] private float stunCooldownTime = 1.5f;
+    [Header("Stun Settings")]    
     [SerializeField] private bool stun;
     
     // Start is called before the first frame update
@@ -44,11 +43,6 @@ public class Peste_Boss_Controller : MonoBehaviour
         animator.SetBool("Cooldown", cooldown);
         animator.SetBool("doubleJumped", doubleJumped);
         animator.SetBool("stunned", stun);
-
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;         
-        }
     }
     private void Death()
     {
@@ -115,7 +109,7 @@ public class Peste_Boss_Controller : MonoBehaviour
     public void Down()
     {
         // Detener el movimiento horizontal del jefe
-        rb.velocity = new Vector2(0f, rb.velocity.y);
+        rb.velocity = new Vector2(-5f, rb.velocity.y);
 
         // Aplicar una fuerza hacia abajo para una caída rápida
         rb.AddForce(Vector2.down * jumpForce * fallMultiplier, ForceMode2D.Impulse);
@@ -132,7 +126,7 @@ public class Peste_Boss_Controller : MonoBehaviour
         {
             stun = true;
         }
-        else if (number == 0)
+        if (number == 0)
         {
             stun = false;
         }

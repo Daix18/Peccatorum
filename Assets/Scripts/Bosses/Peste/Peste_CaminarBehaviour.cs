@@ -26,6 +26,7 @@ public class Peste_CaminarBehaviour : StateMachineBehaviour
 
         // Aplicar la velocidad de movimiento en la dirección adecuada
         rb.velocity = moveDirection * speedMovement + Vector2.up * currentYVelocity;
+        Debug.Log("Caminar");
     }
 
 
