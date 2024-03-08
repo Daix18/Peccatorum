@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Peste_CaminarBehaviour : StateMachineBehaviour
@@ -18,14 +16,18 @@ public class Peste_CaminarBehaviour : StateMachineBehaviour
         bossPeste.LookAtPlayer();
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // Mantener la velocidad en el eje Y igual a la velocidad actual
         float currentYVelocity = rb.velocity.y;
 
-        rb.velocity = new Vector2(speedMovement * animator.transform.right.x, currentYVelocity);
+        // Determinar la dirección de movimiento basada en la orientación del jefe
+        Vector2 moveDirection = bossPeste.facingRight ? Vector2.right : -Vector2.right;
+
+        // Aplicar la velocidad de movimiento en la dirección adecuada
+        rb.velocity = moveDirection * speedMovement + Vector2.up * currentYVelocity;
     }
+
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

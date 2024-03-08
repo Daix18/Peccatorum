@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GasController : MonoBehaviour
@@ -12,18 +10,18 @@ public class GasController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Damage()
     {
-         Collider2D[] objects = Physics2D.OverlapCircleAll(attackController.position, gasRadius);
+        Collider2D[] objects = Physics2D.OverlapCircleAll(attackController.position, gasRadius);
 
         foreach (Collider2D collision in objects)
         {

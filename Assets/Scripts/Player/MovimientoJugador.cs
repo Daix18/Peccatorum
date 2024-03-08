@@ -137,7 +137,7 @@ public class MovimientoJugador : MonoBehaviour
                 //Salto en pared
                 WallJump();
             }
-        }        
+        }
     }
 
     private void FixedUpdate()
@@ -208,7 +208,7 @@ public class MovimientoJugador : MonoBehaviour
         onWall = false;
         rb.velocity = new Vector2(-direccion.x * jumpForceWallX, jumpForceWallY);
         Debug.Log("Wall Jump");
-        StartCoroutine(WallJumpChange());        
+        StartCoroutine(WallJumpChange());
     }
 
     public void Dash()
