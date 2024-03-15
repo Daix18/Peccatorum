@@ -8,6 +8,10 @@ public class Peste_Boss_Controller : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public Animator animator;
     public Transform player;
+    [SerializeField] private Transform groundChecker;
+    [SerializeField] private Vector3 dimensionesCaja;
+    [SerializeField] private LayerMask queEsSuelo;
+    [SerializeField] private bool onGround;
     public bool facingRight = true;
 
     [Header("Vida")]
@@ -43,6 +47,17 @@ public class Peste_Boss_Controller : MonoBehaviour
         animator.SetBool("Cooldown", cooldown);
         animator.SetBool("doubleJumped", doubleJumped);
         animator.SetBool("stunned", stun);
+
+        onGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
+
+        if (onGround)
+        {
+            rb.mass = 1000f;
+        }
+        else 
+        {
+            rb.mass = 1f;
+        }
     }
     private void Death()
     {
@@ -85,6 +100,7 @@ public class Peste_Boss_Controller : MonoBehaviour
     {
         // Aplicar fuerza al jefe para realizar el double jump
         rb.velocity = Vector2.up * jumpForce;
+        rb.mass = 1;
     }
 
     public void SecondJump()
@@ -146,6 +162,7 @@ public class Peste_Boss_Controller : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(attackController.position, attackRadius);
+        Gizmos.DrawWireSphere(attackController.position, attackRadius);      
+        Gizmos.DrawWireCube(groundChecker.position, dimensionesCaja);
     }
 }
