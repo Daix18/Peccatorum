@@ -25,9 +25,16 @@ public class Hambre_Boss_Controller : MonoBehaviour
     [SerializeField] private float attackDamage;
     [Header("Dash Settings")]
     [SerializeField] private bool cooldown = false;    
-    [SerializeField] private float dashingPower = 24f;    
+    [SerializeField] private float dashingPower = 24f;
+    [SerializeField] private float waitTime = 2f;
+    [SerializeField] private float cooldownDuration = 4f;
     private Vector2 dashingDir;
-    private bool isDashing;
+    private bool isDashing;   
+    [Header("Stun settings")]
+    [SerializeField] private bool stun;
+    [SerializeField] private int wallHitCount = 0;
+    [SerializeField] private int maxWallHits = 3;
+    [SerializeField] private float stunDuration = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -43,11 +50,11 @@ public class Hambre_Boss_Controller : MonoBehaviour
         float distancePlayer = Vector2.Distance(transform.position, player.position);
         animator.SetFloat("playerDistance", distancePlayer);
         animator.SetBool("Cooldown", cooldown);
+        animator.SetBool("Stunned", stun);
         animator.SetBool("Dashing", isDashing);
 
         onGround = Physics2D.OverlapBox(groundChecker.position, dimensionesCaja, 0f, queEsSuelo);
-
-        onWall = Physics2D.OverlapBox(wallChecker.position, wallBoxDimensions, 0f, queEsSuelo);
+        onWall = Physics2D.OverlapBox(wallChecker.position, wallBoxDimensions, 0f, queEsSuelo);        
 
         if (onGround)
         {
@@ -58,9 +65,21 @@ public class Hambre_Boss_Controller : MonoBehaviour
             rb.mass = 1f;
         }
 
-        if (onWall)
+        if (onWall && wallHitCount <= maxWallHits && !stun && !cooldown)
         {
+            Debug.Log("AAAAAAA");
+            rb.velocity *= 0.5f;
+
             rb.velocity = Vector2.zero;
+
+            wallHitCount++;
+
+            StartCoroutine(WallCollisionSequence());
+
+            if (wallHitCount >= maxWallHits)
+            {
+                StartCoroutine(Stun());
+            }
         }
     }
 
@@ -77,7 +96,7 @@ public class Hambre_Boss_Controller : MonoBehaviour
         }
         else if (!facingRight)
         {
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
 
         // Invertir la dirección de movimiento
@@ -94,8 +113,9 @@ public class Hambre_Boss_Controller : MonoBehaviour
     }
 
     public void Dash()
-    {        
-        isDashing = true;                
+    {
+        Debug.Log("Dash");
+        isDashing = true;        
         dashingDir = new Vector2(direccion.x, direccion.y);
 
         if (dashingDir == Vector2.zero)
@@ -107,8 +127,7 @@ public class Hambre_Boss_Controller : MonoBehaviour
         {
             // Establecer la velocidad basada en la escala local x del objeto y la potencia de dash
             rb.velocity = dashingDir.normalized * dashingPower;
-        }
-        StartCoroutine(DashChange());
+        }        
     }
 
     private void OnDrawGizmos()
@@ -118,10 +137,24 @@ public class Hambre_Boss_Controller : MonoBehaviour
         Gizmos.DrawWireCube(groundChecker.position, dimensionesCaja);
         Gizmos.DrawWireCube(wallChecker.position, wallBoxDimensions);
     }
-
-    IEnumerator DashChange()
+    
+    IEnumerator WallCollisionSequence()
     {
+        Flip();
+        yield return new WaitForSeconds(waitTime);
+        Dash();
+    }
 
-        yield return new WaitForSeconds(1f);
+    IEnumerator Stun()
+    {
+        Debug.Log("Stuneado");
+        rb.velocity = Vector2.zero;
+        stun = true;
+        cooldown = true;
+        yield return new WaitForSeconds(stunDuration);
+        stun = false;
+        wallHitCount = 0;
+        yield return new WaitForSeconds(cooldownDuration);
+        cooldown = false;
     }
 }
