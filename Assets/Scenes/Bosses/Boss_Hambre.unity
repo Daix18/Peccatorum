@@ -551,6 +551,8 @@ MonoBehaviour:
   dashingPower: 50
   waitTime: 1
   cooldownDuration: 30
+  isDashing: 0
+  canDash: 0
   stun: 0
   wallHitCount: 0
   maxWallHits: 3

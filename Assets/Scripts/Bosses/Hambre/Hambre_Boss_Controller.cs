@@ -29,7 +29,8 @@ public class Hambre_Boss_Controller : MonoBehaviour
     [SerializeField] private float waitTime = 2f;
     [SerializeField] private float cooldownDuration = 4f;
     private Vector2 dashingDir;
-    private bool isDashing;   
+    [SerializeField] private bool isDashing;
+    [SerializeField] private bool canDash;
     [Header("Stun settings")]
     [SerializeField] private bool stun;
     [SerializeField] private int wallHitCount = 0;
@@ -62,12 +63,11 @@ public class Hambre_Boss_Controller : MonoBehaviour
         }
         else
         {
-            rb.mass = 1f;
+            rb.mass = 1f;            
         }
 
         if (onWall && wallHitCount <= maxWallHits && !stun && !cooldown)
-        {
-            Debug.Log("AAAAAAA");
+        {            
             rb.velocity *= 0.5f;
 
             rb.velocity = Vector2.zero;
@@ -78,8 +78,18 @@ public class Hambre_Boss_Controller : MonoBehaviour
 
             if (wallHitCount >= maxWallHits)
             {
+                StopCoroutine(WallCollisionSequence());
                 StartCoroutine(Stun());
             }
+        }
+
+        if (!stun)
+        {
+            canDash = true;
+        }
+        else
+        {
+            canDash = false;
         }
     }
 
@@ -114,20 +124,22 @@ public class Hambre_Boss_Controller : MonoBehaviour
 
     public void Dash()
     {
-        Debug.Log("Dash");
-        isDashing = true;        
-        dashingDir = new Vector2(direccion.x, direccion.y);
-
-        if (dashingDir == Vector2.zero)
+        if (canDash)
         {
-            dashingDir = new Vector2(transform.localScale.x, 0);
+            dashingDir = new Vector2(direccion.x, direccion.y);
+            isDashing = true;        
+
+            if (dashingDir == Vector2.zero)
+            {
+                dashingDir = new Vector2(transform.localScale.x, 0);
+            }
+
+            if (isDashing)
+            {
+                // Establecer la velocidad basada en la escala local x del objeto y la potencia de dash
+                rb.velocity = dashingDir.normalized * dashingPower;
+            }        
         }
-
-        if (isDashing)
-        {
-            // Establecer la velocidad basada en la escala local x del objeto y la potencia de dash
-            rb.velocity = dashingDir.normalized * dashingPower;
-        }        
     }
 
     private void OnDrawGizmos()
@@ -140,9 +152,20 @@ public class Hambre_Boss_Controller : MonoBehaviour
     
     IEnumerator WallCollisionSequence()
     {
+        Debug.Log("Secuencia");
         Flip();
         yield return new WaitForSeconds(waitTime);
-        Dash();
+
+        if (wallHitCount <= maxWallHits)
+        {
+            Debug.Log("Dash Secuencia");
+            canDash = true;
+            Dash();
+        }
+        else if (wallHitCount == maxWallHits)
+        {
+            canDash = false;
+        }
     }
 
     IEnumerator Stun()
