@@ -9,10 +9,13 @@ public class AttackController : MonoBehaviour
     [SerializeField] private float tiempoEntreAtaques;
     [SerializeField] private float tiempoSiguienteAtaque;
     private Animator animator;
+    [SerializeField] private float initialHealth = 100f;
+    private float currentHealth;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        currentHealth = initialHealth;
     }
 
     private void Update()
@@ -20,6 +23,7 @@ public class AttackController : MonoBehaviour
         if (tiempoSiguienteAtaque > 0)
         {
             tiempoSiguienteAtaque -= Time.deltaTime;
+            
         }
 
         if (Input.GetButtonDown("Fire1") && tiempoSiguienteAtaque <= 0)
@@ -31,14 +35,27 @@ public class AttackController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
+        currentHealth -= damage;
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
-            Destroy(gameObject);
+            currentHealth = 0; // Asegurarse de que la vida no sea negativa
+            RespawnPlayer();
         }
     }
-
+    private void RespawnPlayer()
+    {
+        RespawnSystem respawnSystem = GameObject.FindGameObjectWithTag("Respawn").GetComponent<RespawnSystem>();
+        if (respawnSystem != null)
+        {
+            transform.position = respawnSystem.GetLastSpawnPoint();
+            currentHealth = initialHealth;
+        }
+    }
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
     private void Golpe()
     {
         //animator.SetTrigger("Golpe");
@@ -52,6 +69,10 @@ public class AttackController : MonoBehaviour
                 colisionador.transform.GetComponent<Enemigo>().TomarDaño(dañoGolpe);
             }
         }
+    }
+    public void ResetHealth()
+    {
+        currentHealth = initialHealth;
     }
 
     private void OnDrawGizmos()
