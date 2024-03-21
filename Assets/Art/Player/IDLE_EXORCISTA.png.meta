@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cf8ce1e97e03fe941b0a2d8bc5fa6c12
+guid: 933a595b4a85cc345b4fa001f46bd8c8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -105,13 +105,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle_Anim_1_0
+      name: IDLE_EXORCISTA_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 336
-        width: 116
-        height: 140
+        x: 0
+        y: 1152
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +119,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 099621a53851e204b8ef916225c9c400
-      internalID: -2143012386
+      spriteID: c18e63d339022e847b7cfd9b3c6d2a96
+      internalID: -961141193
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_1
+      name: IDLE_EXORCISTA_1
       rect:
         serializedVersion: 2
-        x: 156
-        y: 336
-        width: 116
-        height: 140
+        x: 384
+        y: 1152
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45f7eca3072fff248ad421f11c86cfb6
-      internalID: -1439455139
+      spriteID: 4e21ea25c52c5da44af40f909244eb59
+      internalID: -590927563
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_2
+      name: IDLE_EXORCISTA_2
       rect:
         serializedVersion: 2
-        x: 292
-        y: 336
-        width: 116
-        height: 140
+        x: 768
+        y: 1152
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,20 +161,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5c7e8abe12266b4cbd2f8a6b92cb02f
-      internalID: -901385797
+      spriteID: 62de828ba02390547a139e08085dec26
+      internalID: 69461911
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_3
+      name: IDLE_EXORCISTA_3
       rect:
         serializedVersion: 2
-        x: 428
-        y: 336
-        width: 116
-        height: 140
+        x: 1152
+        y: 1152
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +182,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 787392ebc89ae894f89158794a1a1d14
-      internalID: -1731510992
+      spriteID: c1ec7ea623731f248847fb19b6769519
+      internalID: 577892509
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_4
+      name: IDLE_EXORCISTA_4
       rect:
         serializedVersion: 2
-        x: 564
-        y: 336
-        width: 116
-        height: 140
+        x: 1536
+        y: 1152
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,20 +203,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 39b660cfc2e550a428a6b54ed65ce7da
-      internalID: 1746741396
+      spriteID: 8800acbb05f0b884f98c38081c8e98cd
+      internalID: 1853575770
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_5
+      name: IDLE_EXORCISTA_5
       rect:
         serializedVersion: 2
-        x: 700
-        y: 336
-        width: 116
-        height: 140
+        x: 0
+        y: 768
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -224,20 +224,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee7e1137a5bd46649bafb8422fc3d938
-      internalID: 1530098259
+      spriteID: f687720bf353bfe49a5b378cf21d7658
+      internalID: -1439777874
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_6
+      name: IDLE_EXORCISTA_6
       rect:
         serializedVersion: 2
-        x: 836
-        y: 336
-        width: 116
-        height: 140
+        x: 384
+        y: 768
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,20 +245,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f33e6aa9f5e99041988b8f3b584da3d
-      internalID: 612162942
+      spriteID: 48976625169cc354d88f4a0c73827043
+      internalID: -1912352997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_7
+      name: IDLE_EXORCISTA_7
       rect:
         serializedVersion: 2
-        x: 20
-        y: 176
-        width: 116
-        height: 140
+        x: 768
+        y: 768
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,20 +266,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e7bea35e11310744bea96cbc3b508da
-      internalID: -711074814
+      spriteID: 50133e1959153f541b9a52097bf1dbd8
+      internalID: -1003539898
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_8
+      name: IDLE_EXORCISTA_8
       rect:
         serializedVersion: 2
-        x: 156
-        y: 176
-        width: 116
-        height: 144
+        x: 1152
+        y: 768
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,20 +287,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8cb8ff5dd340e96449ecbe906fe6ae4b
-      internalID: 114139191
+      spriteID: 2bad8502ae9cacc46a907aadffefcb5f
+      internalID: -1614298895
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_9
+      name: IDLE_EXORCISTA_9
       rect:
         serializedVersion: 2
-        x: 292
-        y: 176
-        width: 116
-        height: 144
+        x: 1536
+        y: 768
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -308,20 +308,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c074742deb226264799158f86f29d7e7
-      internalID: 1616922943
+      spriteID: a791ca90efae668419092aa736cb09dd
+      internalID: -1233257078
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_10
+      name: IDLE_EXORCISTA_10
       rect:
         serializedVersion: 2
-        x: 428
-        y: 176
-        width: 116
-        height: 144
+        x: 0
+        y: 384
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -329,20 +329,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 50858f023f711d0468c8dda4b5b7ff81
-      internalID: -122508089
+      spriteID: f337b88ab8fd45645a6e467069cd3398
+      internalID: 1684213839
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_11
+      name: IDLE_EXORCISTA_11
       rect:
         serializedVersion: 2
-        x: 564
-        y: 176
-        width: 116
-        height: 144
+        x: 384
+        y: 384
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -350,20 +350,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44882214eb36ac04ab491c16ec29417f
-      internalID: -318441130
+      spriteID: 159749a849cefe04dbda5674dce4629f
+      internalID: -20673691
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_12
+      name: IDLE_EXORCISTA_12
       rect:
         serializedVersion: 2
-        x: 700
-        y: 176
-        width: 116
-        height: 144
+        x: 768
+        y: 384
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -371,20 +371,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3855fbf0a79140a4281cb2121179df26
-      internalID: 301098734
+      spriteID: 33eea47858b09084f8844677c5683b21
+      internalID: 1321424253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_13
+      name: IDLE_EXORCISTA_13
       rect:
         serializedVersion: 2
-        x: 836
-        y: 176
-        width: 116
-        height: 144
+        x: 1152
+        y: 384
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -392,20 +392,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa6ef5c88c1b484449d98249e0e14004
-      internalID: 1722214385
+      spriteID: 451f2b62468f1464bacc2e0b1da268ae
+      internalID: -134136866
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_14
+      name: IDLE_EXORCISTA_14
       rect:
         serializedVersion: 2
-        x: 20
-        y: 12
-        width: 116
-        height: 144
+        x: 1536
+        y: 384
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -413,20 +413,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86f02ca88305a1347a6a28e7d0e36275
-      internalID: 969576614
+      spriteID: b0dab79a3af93f542a0e304d745f8364
+      internalID: -1113331519
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_15
+      name: IDLE_EXORCISTA_15
       rect:
         serializedVersion: 2
-        x: 156
-        y: 12
-        width: 116
-        height: 144
+        x: 0
+        y: 0
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -434,20 +434,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 742e6e5d73b036e409ef310cf87baa2a
-      internalID: 1757613107
+      spriteID: 7cdfa9f6068c8a24ebf34b6fe015e886
+      internalID: -2002453501
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_16
+      name: IDLE_EXORCISTA_16
       rect:
         serializedVersion: 2
-        x: 292
-        y: 12
-        width: 116
-        height: 140
+        x: 384
+        y: 0
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -455,20 +455,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 26040b1cb9493af458f30ef82be8656e
-      internalID: 1713983354
+      spriteID: e44cad2eac1d753458038ae9a30e9275
+      internalID: -1260748209
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Anim_1_17
+      name: IDLE_EXORCISTA_17
       rect:
         serializedVersion: 2
-        x: 428
-        y: 12
-        width: 116
-        height: 136
+        x: 768
+        y: 0
+        width: 384
+        height: 384
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -476,8 +476,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2406c1859611f16419b7bfd2255f2343
-      internalID: 97610140
+      spriteID: cd933e9ed981dd3488c6837e367e89b7
+      internalID: 1466236050
       vertices: []
       indices: 
       edges: []
@@ -493,24 +493,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Idle_Anim_1_0: -2143012386
-      Idle_Anim_1_1: -1439455139
-      Idle_Anim_1_10: -122508089
-      Idle_Anim_1_11: -318441130
-      Idle_Anim_1_12: 301098734
-      Idle_Anim_1_13: 1722214385
-      Idle_Anim_1_14: 969576614
-      Idle_Anim_1_15: 1757613107
-      Idle_Anim_1_16: 1713983354
-      Idle_Anim_1_17: 97610140
-      Idle_Anim_1_2: -901385797
-      Idle_Anim_1_3: -1731510992
-      Idle_Anim_1_4: 1746741396
-      Idle_Anim_1_5: 1530098259
-      Idle_Anim_1_6: 612162942
-      Idle_Anim_1_7: -711074814
-      Idle_Anim_1_8: 114139191
-      Idle_Anim_1_9: 1616922943
+      IDLE_EXORCISTA_0: -961141193
+      IDLE_EXORCISTA_1: -590927563
+      IDLE_EXORCISTA_10: 1684213839
+      IDLE_EXORCISTA_11: -20673691
+      IDLE_EXORCISTA_12: 1321424253
+      IDLE_EXORCISTA_13: -134136866
+      IDLE_EXORCISTA_14: -1113331519
+      IDLE_EXORCISTA_15: -2002453501
+      IDLE_EXORCISTA_16: -1260748209
+      IDLE_EXORCISTA_17: 1466236050
+      IDLE_EXORCISTA_2: 69461911
+      IDLE_EXORCISTA_3: 577892509
+      IDLE_EXORCISTA_4: 1853575770
+      IDLE_EXORCISTA_5: -1439777874
+      IDLE_EXORCISTA_6: -1912352997
+      IDLE_EXORCISTA_7: -1003539898
+      IDLE_EXORCISTA_8: -1614298895
+      IDLE_EXORCISTA_9: -1233257078
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

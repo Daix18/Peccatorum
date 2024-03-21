@@ -1,36 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Hambre_Boss_Controller : MonoBehaviour
 {
     [Header("Fundamental Components")]
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public Animator animator;
+    [HideInInspector] public bool facingRight = true;
     public Transform player;
     [SerializeField] private Transform groundChecker;
-    [SerializeField] private Transform wallChecker;
+    [SerializeField] private Transform wallChecker;    
     [SerializeField] private Vector3 dimensionesCaja;
     [SerializeField] private Vector3 wallBoxDimensions;
-    [SerializeField] private LayerMask queEsSuelo;
+    [SerializeField] private LayerMask queEsSuelo;    
     [SerializeField] private bool onGround;
-    [SerializeField] private bool onWall;
-    public bool facingRight = true;
+    [SerializeField] private bool onWall;    
     private Vector2 direccion;
+
     [Header("Vida")]
     [SerializeField] private float life;
+
     [Header("Attack Settings")]
     [SerializeField] private Transform attackController;
     [SerializeField] private float attackRadius;
     [SerializeField] private float attackDamage;
+
     [Header("Dash Settings")]
     [SerializeField] private bool cooldown = false;    
     [SerializeField] private float dashingPower = 24f;
     [SerializeField] private float waitTime = 2f;
     [SerializeField] private float cooldownDuration = 4f;
+    [SerializeField] private float throwMagnitude = 10f;
     private Vector2 dashingDir;
     [SerializeField] private bool isDashing;
     [SerializeField] private bool canDash;
+
     [Header("Stun settings")]
     [SerializeField] private bool stun;
     [SerializeField] private int wallHitCount = 0;
@@ -42,7 +48,7 @@ public class Hambre_Boss_Controller : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();                 
     }
 
     // Update is called once per frame
@@ -124,6 +130,7 @@ public class Hambre_Boss_Controller : MonoBehaviour
 
     public void Dash()
     {
+
         if (canDash)
         {
             dashingDir = new Vector2(direccion.x, direccion.y);
@@ -149,7 +156,24 @@ public class Hambre_Boss_Controller : MonoBehaviour
         Gizmos.DrawWireCube(groundChecker.position, dimensionesCaja);
         Gizmos.DrawWireCube(wallChecker.position, wallBoxDimensions);
     }
-    
+
+    //En esta función, hacemos la comprobación de que si hemos chocado contra el player, lo mandamos hacia arriba.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
+
+            // Verifica que se encontró el Rigidbody
+            if (playerRb != null)
+            {
+                // Aplica una fuerza hacia arriba al Rigidbody del jugador
+                playerRb.AddForce(Vector2.up * throwMagnitude, ForceMode2D.Impulse);
+            }
+        }
+    }
+
+
     IEnumerator WallCollisionSequence()
     {
         Debug.Log("Secuencia");
